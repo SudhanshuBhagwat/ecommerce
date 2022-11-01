@@ -3,15 +3,8 @@ import React, { PropsWithChildren } from "react";
 
 interface Props {
   children?: React.ReactNode;
-  menu: any
+  menu: any;
 }
-
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -41,34 +34,40 @@ const Layout: React.FC<PropsWithChildren<Props>> = ({ children, menu }) => {
         <div className="flex h-12 sm:px-6 lg:px-8 items-center border-b">
           <div className="flex space-x-8">
             {menus.map((menu: any) => (
-              <a
+              <div
+                className="group relative"
                 key={menu.id}
-                href={menu.attributes.url}
-                className={classNames(
-                  current === menu.attributes.url ? "text-blue-600" : "text-gray-600 hover:text-blue-500",
-                  "text-sm font-medium group py-4 relative"
-                )}
               >
-                <span className="">
+                <a
+                  href={menu.attributes.url}
+                  className={classNames(
+                    current === menu.attributes.url
+                      ? "text-blue-600"
+                      : "text-gray-600 hover:text-blue-500",
+                    "text-sm font-medium py-4"
+                  )}
+                >
                   {menu.attributes.title}
-                </span>
-                {menu.attributes.children.data.length > 0 && <div className="absolute top-[50px] w-48 bg-red-200 px-4 py-2 hidden group-hover:flex group-hover:flex-col group-hover:space-y-4">
-                  {
-                    menu.attributes.children.data.map((subMenu: any) => (
+                </a>
+                {menu.attributes.children.data.length > 0 && (
+                  <div className="absolute top-[36px] w-48 bg-red-200 px-4 py-2 hidden group-hover:flex group-hover:flex-col group-hover:space-y-4">
+                    {menu.attributes.children.data.map((subMenu: any) => (
                       <a
                         key={subMenu.id}
                         href={subMenu.attributes.url}
                         className={classNames(
-                          current === menu.attributes.url ? "text-blue-600" : "text-gray-600 hover:text-blue-500",
+                          current === menu.attributes.url
+                            ? "text-blue-600"
+                            : "text-gray-600 hover:text-blue-500",
                           "rounded-md text-sm font-medium py-1"
                         )}
                       >
                         {subMenu.attributes.title}
                       </a>
-                    ))
-                  }
-                </div>}
-              </a>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>

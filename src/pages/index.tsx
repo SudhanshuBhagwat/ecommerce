@@ -4,7 +4,7 @@ export default function Home({ menu }: { menu: any }) {
   return <Layout menu={menu}>Hello</Layout>;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const data = await fetch(`http://localhost:1337/api/menus/1?nested&populate=*`, {
     headers: {
       Authorization: `Bearer ${process.env.STRAPI_TOKEN}`
