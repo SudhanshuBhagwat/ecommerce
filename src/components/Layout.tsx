@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { PropsWithChildren } from "react";
 
@@ -25,7 +26,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = ({ children, menu }) => {
               <div className="h-6 w-6 mix-blend-multiply bg-red-200 transform rotate-45"></div>
               <div className="h-6 w-6 mix-blend-multiply bg-emerald-200 transform rotate-45 -ml-1"></div>
             </div>
-            <h1 className="text-2xl font-bold">Your Store</h1>
+            <h1 className="text-2xl font-bold cursor-pointer"><Link href={"/"}>Your Store</Link></h1>
           </div>
           <div>
             <div className="h-10 w-10 rounded-full bg-red-400"></div>
@@ -50,11 +51,11 @@ const Layout: React.FC<PropsWithChildren<Props>> = ({ children, menu }) => {
                   {menu.attributes.title}
                 </a>
                 {menu.attributes.children.data.length > 0 && (
-                  <div className="absolute top-[36px] w-48 bg-red-200 px-4 py-2 hidden group-hover:flex group-hover:flex-col group-hover:space-y-4">
+                  <div className="absolute z-50 top-[36px] w-48 bg-red-200 px-4 py-2 hidden group-hover:flex group-hover:flex-col group-hover:space-y-4">
                     {menu.attributes.children.data.map((subMenu: any) => (
                       <a
                         key={subMenu.id}
-                        href={subMenu.attributes.url}
+                        href={`${menu.attributes.url}${subMenu.attributes.url}`}
                         className={classNames(
                           current === menu.attributes.url
                             ? "text-blue-600"
@@ -72,7 +73,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = ({ children, menu }) => {
           </div>
         </div>
       </header>
-      <main className="lg:px-8 lg:py-4">{children}</main>
+      <main>{children}</main>
     </div>
   );
 };

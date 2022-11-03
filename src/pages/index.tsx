@@ -1,36 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import Layout from "../components/Layout";
+import ProductSection from "../components/ProductSection";
 
 interface Props {
   menu: any;
   onSaleProducts: any;
+  frontCategory: any;
 }
 
-export default function Home({ menu, onSaleProducts }: Props) {
+export default function Home({ menu, onSaleProducts, frontCategory }: Props) {
   return (
     <Layout menu={menu}>
-      <section>
-        <div className="grid grid-cols-4 gap-8">
-          {onSaleProducts.data.map((product: any) => (
-            <Link href={`/products/${product.id}`} key={product.id}>
-              <div className="min-h-72 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:aspect-none lg:h-80">
-                <Image
-                  src={`http://localhost:1337${product.attributes.image.data[0].attributes.url}`}
-                  alt={product.attributes.title}
-                  className="h-full w-full lg:h-full lg:w-full"
-                  width={400}
-                  height={600}
-                />
-              </div>
-              <div className="flex justify-between items-center">
-                <h3 className="font-semibold">{product.attributes.title}</h3>
-                <span>{product.attributes.price}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <div className="h-[26rem] w-full bg-slate-400"></div>
+      <div className="lg:px-8 lg:py-4">
+        <ProductSection title="On Sale" data={onSaleProducts.data} />
+        <ProductSection title="Front-End Category" data={frontCategory.data} />
+      </div>
     </Layout>
   );
 }
@@ -56,10 +42,21 @@ export async function getServerSideProps() {
   );
   const onSaleProducts = await data.json();
 
+  data = await fetch(
+    `http://localhost:1337/api/products?filters[categories][name][$eq]=Front&populate=*&pagination[page]=1&pagination[pageSize]=4`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.STRAPI_TOKEN}`,
+      },
+    }
+  );
+  const frontCategory = await data.json();
+
   return {
     props: {
       menu,
       onSaleProducts,
+      frontCategory
     },
   };
 }
